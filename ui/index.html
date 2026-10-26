@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent Flow</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app" id="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="3.5" cy="3.5" r="1.8"/><circle cx="12.5" cy="8" r="1.8"/><circle cx="3.5" cy="12.5" r="1.8"/><path d="M5.3 3.5h2.2a2 2 0 0 1 2 2v.5a2 2 0 0 0 1.2 1.8M5.3 12.5h2.2a2 2 0 0 0 2-2V10a2 2 0 0 1 1.2-1.8"/></svg>
+        </div>
+        <div class="brand-name">Agent Flow</div>
+        <span class="live" id="live"><i></i><span>Offline</span></span>
+      </div>
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3" stroke-linecap="round"/></svg>
+        <input id="search" placeholder="Filter runs" autocomplete="off" spellcheck="false">
+        <kbd>/</kbd>
+      </label>
+      <button class="nav-item" id="live-now" title="Every conversation at a glance (O)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="2" y="2" width="5" height="5" rx="1.2"/><rect x="9" y="2" width="5" height="5" rx="1.2"/><rect x="2" y="9" width="5" height="5" rx="1.2"/><rect x="9" y="9" width="5" height="5" rx="1.2"/></svg>
+        Live now
+        <span class="count" id="live-count"></span>
+      </button>
+      <button class="nav-item hidden" id="follow" title="When this conversation starts a new request, show it (F)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="2"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2"/></svg>
+        Follow this conversation
+        <span class="toggle"></span>
+      </button>
+      <nav class="runs" id="runs"></nav>
+      <div class="sidebar-foot">
+        <span>Colors</span>
+        <span class="appearance-ctl" id="appearance"></span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div id="global-banner"></div>
+      <header class="topbar">
+        <button class="icon-btn" id="toggle-sidebar" title="Hide the sidebar (S)">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="1.75" y="2.5" width="12.5" height="11" rx="2"/><path d="M6 2.5v11"/></svg>
+        </button>
+        <div class="crumbs" id="crumbs"></div>
+        <div class="spacer"></div>
+        <button class="text-btn hidden" id="fit-screen" title="Show every step at once (0)">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg>
+          <span class="btn-label">Fit to screen</span>
+        </button>
+        <div class="zoom-ctl" title="Make everything bigger or smaller (⌘+ / ⌘− / ⌘0)">
+          <button class="icon-btn" id="zoom-out-page" title="Smaller (⌘−)">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3.5 8h9"/></svg>
+          </button>
+          <button class="zoom-pct" id="zoom-pct">100%</button>
+          <button class="icon-btn" id="zoom-in-page" title="Bigger (⌘+)">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3.5 8h9M8 3.5v9"/></svg>
+          </button>
+        </div>
+        <div class="segmented" id="views">
+          <button data-view="tree" title="Tree and timeline (G)">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 3.5h4M5 8h5M5 12.5h7M3 3.5v9h2M3 8h2"/></svg>
+            <span class="btn-label">Tree</span>
+          </button>
+          <button data-view="graph" title="Graph (G)">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="1.5" y="6" width="4" height="4" rx="1"/><rect x="10.5" y="2" width="4" height="4" rx="1"/><rect x="10.5" y="10" width="4" height="4" rx="1"/><path d="M5.5 8h2.5M8 4v8M8 4h2.5M8 12h2.5"/></svg>
+            <span class="btn-label">Graph</span>
+          </button>
+        </div>
+        <button class="icon-btn" id="expand-all" title="Expand all">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 6 3.5-3.5L11.5 6M4.5 10l3.5 3.5 3.5-3.5"/></svg>
+        </button>
+        <button class="icon-btn" id="collapse-all" title="Collapse to turns">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 2.5 3.5 3.5 3.5-3.5M4.5 13.5 8 10l3.5 3.5"/></svg>
+        </button>
+      </header>
+
+      <section class="runbar hidden" id="runbar"></section>
+      <div id="banner"></div>
+
+      <section class="content">
+        <div class="view tree" id="tree">
+          <div class="tree-head">
+            <div class="col-name">Name</div>
+            <div class="col-meta">Tokens</div>
+            <div class="col-dur">Duration</div>
+            <div class="ticks" id="ticks"></div>
+          </div>
+          <div class="tree-body" id="tree-body" tabindex="0"></div>
+        </div>
+        <div class="view graph hidden" id="graph">
+          <div class="graph-canvas" id="graph-canvas"></div>
+          <div class="graph-hint" id="graph-hint">Click any step to see what happened</div>
+          <div class="graph-controls">
+            <button class="icon-btn" id="zoom-out" title="Zoom the graph out">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3.5 8h9"/></svg>
+            </button>
+            <span class="zoom" id="zoom-level">100%</span>
+            <button class="icon-btn" id="zoom-in" title="Zoom the graph in">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3.5 8h9M8 3.5v9"/></svg>
+            </button>
+            <button class="icon-btn" id="fit" title="Show every step at once (0)">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="view overview hidden" id="overview"></div>
+        <div class="empty hidden" id="empty"></div>
+      </section>
+    </main>
+
+    <aside class="inspector hidden" id="inspector"></aside>
+  </div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+{
+  "name": "zidane-agent-flow",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Live tree, timeline and graph view of how a zidane agent works: runs, turns, tool calls and subagents, in a Linear-style UI.",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "zidane",
+    "zidane-extension",
+    "observability",
+    "visualization"
+  ],
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "import": "./index.ts",
+      "default": "./index.ts"
+    }
+  },
+  "files": [
+    "index.ts",
+    "src",
+    "ui"
+  ],
+  "zidane": {
+    "apiVersion": 1,
+    "name": "agent-flow",
+    "displayName": "Agent Flow",
+    "capabilities": [
+      "hooks",
+      "storage"
+    ]
+  },
+  "scripts": {
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "demo": "bun scripts/demo.ts",
+    "install:local": "rsync -a --delete --exclude node_modules --exclude .git --exclude test --exclude scripts ./ ~/.zidane/extensions/agent-flow/"
+  },
+  "peerDependencies": {
+    "zidane": ">=8.2.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.4",
+    "typescript": "~6.0.3",
+    "zidane": "8.2.5"
+  }
+}
